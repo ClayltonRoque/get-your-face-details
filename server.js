@@ -1,11 +1,15 @@
-const fs = require('fs')
-const https = require('https')
-const express = require('express')
+import express from "express";
+import fs from "fs";
+import https from "https";
+const app = express(); // Criação da instância do Express
 
-const key = fs.readFileSync('./certs/cert.key')
-const cert = fs.readFileSync('./certs/cert.crt')
-const app = express()
-const secureExpress = https.createServer({key, cert}, app)
+const options = {
+  key: fs.readFileSync("./certificado.key"),
+  cert: fs.readFileSync("./certificado.cert"),
+};
 
-app.use(express.static('public')) //serve our files in public statically
-secureExpress.listen(5000)
+app.use(express.static("public"));
+
+https.createServer(options, app).listen(3000, () => {
+  console.log("Servidor HTTPS rodando na porta 3000");
+});
